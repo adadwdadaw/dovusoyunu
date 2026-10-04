@@ -1,0 +1,132 @@
+<!doctype html>
+<html lang="tr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Gök Arenası</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@700;900&family=Barlow+Semi+Condensed:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div id="stage"></div>
+
+<div id="hud" hidden>
+  <div class="side p1"><div class="name" id="n1">Kor</div>
+    <div class="bar hp"><div class="lag" id="lag1"></div><div class="fill" id="hp1"></div></div>
+    <div class="pips" id="pips1"><i></i><i></i></div></div>
+  <div class="clock"><span id="timer">90</span><span id="roundLabel">Raunt 1</span><br><button id="pauseBtn" type="button">Duraklat</button></div>
+  <div class="side p2"><div class="name" id="n2">Ayaz</div>
+    <div class="bar hp"><div class="lag" id="lag2"></div><div class="fill" id="hp2"></div></div>
+    <div class="pips" id="pips2"><i></i><i></i></div></div>
+</div>
+<div id="cross" hidden></div>
+<div id="power" hidden aria-label="Süper güçler">
+  <div class="ult" id="ultBox">
+    <i class="halo"></i>
+    <svg viewBox="0 0 100 100" class="ring" aria-hidden="true"><circle class="track" cx="50" cy="50" r="44"/><circle class="fill" id="ultFill" cx="50" cy="50" r="44" pathLength="100"/></svg>
+    <div class="orb"><span class="liquid"></span><span class="num"><span id="ultPct">0</span><small>%</small></span></div>
+    <span class="orbit"><i></i><i></i><i></i></span>
+    <kbd class="key">R</kbd>
+  </div>
+  <div class="pinfo">
+    <div class="uname" id="ultName">Ulti</div>
+    <div class="ustate" id="ultState">Dolduruluyor</div>
+    <div class="ab" id="abQ"><span class="dial"><svg viewBox="0 0 40 40" aria-hidden="true"><circle class="track" cx="20" cy="20" r="16"/><circle class="sweep" cx="20" cy="20" r="16" pathLength="100"/></svg><kbd>Q</kbd><span class="cd"></span></span><span class="txt"><b class="nm"></b><span class="st"></span></span></div>
+    <div class="ab" id="abE"><span class="dial"><svg viewBox="0 0 40 40" aria-hidden="true"><circle class="track" cx="20" cy="20" r="16"/><circle class="sweep" cx="20" cy="20" r="16" pathLength="100"/></svg><kbd>E</kbd><span class="cd"></span></span><span class="txt"><b class="nm"></b><span class="st"></span></span></div>
+  </div>
+</div>
+<div id="lookHint" hidden>Fareyle bakmak için ekrana tıkla</div>
+<div class="viewtag" id="vt1" hidden></div>
+<div id="announce"></div>
+<div class="combo" id="combo1"></div>
+<div class="combo" id="combo2"></div>
+<div id="netTag" hidden></div>
+
+<div id="menu" class="overlay">
+  <div class="panel">
+    <h1>Gök Arenası</h1>
+    <p class="lede">Bulutların üstünde süzülen dev bir tapınak adası. Altı savaşçı, altı silah, her birinin kendine özgü güçleri. Rakibini yere ser ya da adanın kenarından boşluğa savur.</p>
+    <h2 class="pickh">Savaşçını seç</h2>
+    <div class="roster" id="roster" role="radiogroup" aria-label="Savaşçını seç"></div>
+    <div class="orow"><label class="namelab">Adın<input id="myName" maxlength="12" placeholder="Oyuncu" autocomplete="off"></label></div>
+
+    <section class="modebox">
+      <h2>Bota karşı</h2>
+      <div class="seg" role="radiogroup" aria-label="Bot zorluğu">
+        <button type="button" role="radio" data-lv="easy" aria-checked="false">Kolay</button>
+        <button type="button" role="radio" data-lv="normal" aria-checked="true">Orta</button>
+        <button type="button" role="radio" data-lv="hard" aria-checked="false">Zor</button>
+      </div>
+      <div class="actions"><button class="main" id="botBtn" type="button">Bota karşı başla</button></div>
+    </section>
+
+    <section class="modebox online">
+      <h2>Arkadaşınla online</h2>
+      <p>Arkadaşın bu oyunu kendi cihazında açsın. Biriniz oda kursun, diğeri kodu girip katılsın. Herkes yukarıda seçtiği savaşçıyla oynar. İkinizin de internete bağlı olması yeterli.</p>
+      <div class="orow"><button class="main" id="hostBtn" type="button">Oda kur</button></div>
+      <div class="orow"><input id="codeIn" maxlength="4" placeholder="KOD" aria-label="Oda kodu" autocomplete="off"><button class="alt" id="joinBtn" type="button">Odaya katıl</button></div>
+      <p id="onlineMsg" role="status"></p>
+    </section>
+
+    <section class="modebox">
+      <h2>Kontroller</h2>
+      <dl class="keys">
+        <dt>Hareket</dt><dd><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd></dd>
+        <dt>Etrafa bak</dt><dd>Fare (önce oyun ekranına tıkla)<span class="or">ya da</span><kbd>←</kbd><kbd>→</kbd><kbd>↑</kbd><kbd>↓</kbd></dd>
+        <dt>Zıpla</dt><dd><kbd>Space</kbd></dd>
+        <dt>Yumruk</dt><dd>Sol tık<span class="or">ya da</span><kbd>J</kbd></dd>
+        <dt>Tekme</dt><dd>Sağ tık<span class="or">ya da</span><kbd>K</kbd></dd>
+        <dt>Blok</dt><dd><kbd>F</kbd> basılı tut</dd>
+        <dt>Atılma</dt><dd><kbd>Shift</kbd></dd>
+        <dt>1. güç</dt><dd><kbd>Q</kbd> (5 saniyede bir)</dd>
+        <dt>2. güç</dt><dd><kbd>E</kbd> (5 saniyede bir)</dd>
+        <dt>Ulti</dt><dd><kbd>R</kbd> (dolu enerji barı)</dd>
+        <dt>Kamera</dt><dd><kbd>V</kbd> birinci ya da üçüncü şahıs</dd>
+        <dt>Duraklat</dt><dd><kbd>Esc</kbd></dd>
+      </dl>
+      <p class="rules">Nişan, baktığın yöne gider. Rakip nişangâhın yakınındaysa vuruşların ve güçlerin ona kendiliğinden yönelir. Kırmızı ya da sarı halkalar gökten gelecek saldırının düşeceği yeri gösterir, hemen çık. Taş sütunlar seni de mermileri de durdurur. Adanın kenarından düşen raundu kaybeder. İlk iki raundu alan kazanır.</p>
+    </section>
+  </div>
+</div>
+
+<div id="lobby" class="overlay" hidden>
+  <div class="panel small-panel">
+    <h2 id="lobbyTitle">Oda kuruldu</h2>
+    <p class="code" id="lobbyCode"></p>
+    <p id="lobbyMsg">Bu kodu arkadaşına ver. O katılınca dövüş kendiliğinden başlar.</p>
+    <div class="actions"><button class="alt" id="lobbyCancel" type="button">Vazgeç</button></div>
+  </div>
+</div>
+
+<div id="pause" class="overlay" hidden>
+  <div class="panel small-panel">
+    <h2>Durduruldu</h2>
+    <div class="actions">
+      <button class="main" id="resumeBtn" type="button">Devam et</button>
+      <button class="alt" id="muteBtn" type="button">Sesi kapat</button>
+      <button class="alt" id="quitBtn" type="button">Ana menüye dön</button>
+    </div>
+  </div>
+</div>
+
+<div id="result" class="overlay" hidden>
+  <div class="panel small-panel result">
+    <h2 id="resultTitle">Kazandı</h2>
+    <p class="score" id="resultScore">2 – 0</p>
+    <p id="resultNote" hidden>Rövanşı ev sahibi başlatır.</p>
+    <div class="actions">
+      <button class="main" id="rematchBtn" type="button">Rövanş</button>
+      <button class="alt" id="menuBtn" type="button">Ana menü</button>
+    </div>
+  </div>
+</div>
+
+<div id="touch" hidden></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
+<script src="game.js"></script>
+</body>
+</html>
